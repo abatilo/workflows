@@ -16,10 +16,6 @@ jobs:
   deploy:
     name: Build, push, and deploy
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      packages: write
-      contents: read
     steps:
       - uses: actions/checkout@v2
       - uses: asdf-vm/actions/install@v1
