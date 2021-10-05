@@ -6,9 +6,6 @@ on:
         description: "Application / container name"
         required: true
         type: string
-    secrets:
-      token:
-        required: true
 
 jobs:
   deploy:
@@ -23,7 +20,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.token }}
+          password: ${{ github.token }}
 
       - name: Access EKS
         env:
