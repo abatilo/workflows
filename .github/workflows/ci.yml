@@ -7,8 +7,6 @@ on:
         required: true
         type: string
     secrets:
-      foo:
-        required: true
       token:
         required: true
 
@@ -19,11 +17,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: asdf-vm/actions/install@v1
-
-      - run: |
-          echo ${{ secrets.foo }}
-          echo ${{ secrets.token }}
-          echo ${{ secrets.GITHUB_TOKEN }}
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
