@@ -52,5 +52,5 @@ jobs:
 
       - name: Deploy
         run: |
-          sed -i 's/DOCKER_IMAGE/${{ steps.meta.outputs.tags }}/' ${{ inputs.name }}.yaml
+          sed -i 's/IMAGE_TAG/${{ steps.meta.outputs.version }}/' ${{ inputs.name }}.yaml
           kubectl apply -f ${{ inputs.name }}.yaml
