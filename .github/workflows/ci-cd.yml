@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          commands=$(echo ${{ inputs.commands }} | jq --raw-input . | jq --slurp -c 'add | {cmd: .}')
+          commands=$(echo "${{ inputs.commands }}" | jq --raw-input . | jq --slurp -c 'add | {cmd: .}')
           echo "::set-output name=matrix::${commands}"
   test-matrix:
     needs: [read-inputs]
