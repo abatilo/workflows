@@ -17,7 +17,8 @@ jobs:
       - id: build-matrix
         name: Convert commands to json array
         run: |
-          commands=$(echo "${{ inputs.commands }}" | jq --raw-input '[.]' | jq --slurp -c 'add | {cmd: .}')
+          # Convert multiline string to a json array while filtering blank lines
+          commands=$(echo "${{ inputs.commands }}" | jq --raw-input '[. | select(0 < length)]' | jq --slurp -c 'add | {cmd: .}')
           echo "${commands}"
           echo "::set-output name=matrix::${commands}"
   test-matrix:

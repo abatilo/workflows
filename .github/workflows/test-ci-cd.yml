@@ -7,9 +7,4 @@ jobs:
   run-ci-cd:
     uses: abatilo/workflows/.github/workflows/ci-cd.yml@main
     with:
-      commands: |
-        is
-        this
-        a
-        bad
-        idea?
+      commands: ""
