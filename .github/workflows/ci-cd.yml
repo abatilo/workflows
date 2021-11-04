@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: Convert commands to json array
         run: |
-          commands=$(echo "${{ inputs.commands }}" | jq --raw-input . | jq --slurp -c 'add | {cmd: .}')
+          commands=$(echo "${{ inputs.commands }}" | jq --raw-input '[.]' | jq --slurp -c 'add | {cmd: .}')
           echo "${commands}"
           echo "::set-output name=matrix::${commands}"
   test-matrix:
