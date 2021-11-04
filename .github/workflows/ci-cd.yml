@@ -20,7 +20,7 @@ jobs:
     name: "Print inputs"
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{ fromJson(needs.read-inputs.outputs.matrix }}
+      matrix: ${{ fromJson(needs.read-inputs.outputs.matrix) }}
     steps:
       - run: |
           echo ${{ matrix.dir }}
