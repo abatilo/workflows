@@ -11,19 +11,20 @@ jobs:
   read-inputs:
     name: "Convert input commands to list"
     runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.build-matrix.outputs.matrix }}
     steps:
       - name: Convert commands to json array
         run: |
-          cat << EOF > commands.txt
-          ${{ inputs.commands }}
-          EOF
-          commands="$(cat commands.txt | jq --raw-input '[.]' | jq --slurp -c 'add | {cmd: .}')"
+          commands=$(echo "${{ inputs.commands }}" | jq --raw-input . | jq --slurp -c 'add | {cmd: .}')
           echo "${commands}"
           echo "::set-output name=matrix::${commands}"
   test-matrix:
     needs: [read-inputs]
     name: "Print inputs"
+    strategy:
+      matrix: ${{ fromJson(needs.read-inputs.outputs.matrix) }}
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo ${{ fromJson(needs.read-inputs.outputs) }}
+          echo ${{ matrix.cmd }}
