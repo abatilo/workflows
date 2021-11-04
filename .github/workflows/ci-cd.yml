@@ -21,8 +21,7 @@ jobs:
     needs: [read-inputs]
     name: "Print inputs"
     runs-on: ubuntu-latest
-    strategy:
-      matrix: ${{ fromJson(needs.read-inputs.outputs.matrix) }}
     steps:
       - run: |
-          echo ${{ matrix.cmd }}
+          echo ${{ fromJson(needs.read-inputs.outputs.matrix) }}
+          echo ${{ fromJson(needs.read-inputs.outputs) }}
