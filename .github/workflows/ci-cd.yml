@@ -1,0 +1,26 @@
+name: Docker build, push, and deploy
+on:
+  workflow_call:
+    inputs:
+      commands:
+        description: "Multiline string of commands"
+        required: true
+        type: string
+
+jobs:
+  read-inputs:
+    name: "Convert input commands to list"
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          commands=$(echo ${{ inputs.commands }} | jq --raw-input . | jq --slurp -c 'add | {cmd: .}')
+          echo "::set-output name=matrix::${commands}"
+  test-matrix:
+    needs: [read-inputs]
+    name: "Print inputs"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{ fromJson(needs.read-inputs.outputs.matrix }}
+    steps:
+      - run: |
+          echo ${{ matrix.dir }}
