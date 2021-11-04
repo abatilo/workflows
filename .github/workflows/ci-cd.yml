@@ -14,7 +14,8 @@ jobs:
     outputs:
       matrix: ${{ steps.build-matrix.outputs.matrix }}
     steps:
-      - name: Convert commands to json array
+      - id: build-matrix
+        name: Convert commands to json array
         run: |
           commands=$(echo "${{ inputs.commands }}" | jq --raw-input '[.]' | jq --slurp -c 'add | {cmd: .}')
           echo "${commands}"
