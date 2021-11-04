@@ -17,7 +17,7 @@ jobs:
           cat << EOF > commands.txt
           ${{ inputs.commands }}
           EOF
-          commands="$(cat commands.txt | jq --raw-input '[.]' | jq --slurp -c 'add | {cmd: .}')
+          commands="$(cat commands.txt | jq --raw-input '[.]' | jq --slurp -c 'add | {cmd: .}')"
           echo "${commands}"
           echo "::set-output name=matrix::${commands}"
   test-matrix:
