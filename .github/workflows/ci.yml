@@ -30,7 +30,8 @@ jobs:
 
       - name: Access EKS
         run: |
-          aws eks update-kubeconfig --name usw2-eks-a
+          cluster_name="$(dig +short txt aaronbatilo.dev | jq -r '. | fromjson.cluster_name')"
+          aws eks update-kubeconfig --name "${cluster_name}"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
