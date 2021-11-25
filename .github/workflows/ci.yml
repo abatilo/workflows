@@ -13,8 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       AWS_DEFAULT_REGION: us-west-2
-      AWS_WEB_IDENTITY_TOKEN_FILE: /tmp/awscreds
-      AWS_ROLE_ARN: arn:aws:iam::717012417639:role/srv_ops
     steps:
       - uses: actions/checkout@v2
       - uses: asdf-vm/actions/install@v1
@@ -25,10 +23,15 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ github.token }}
+          
+      - name: Configure AWS credentials from Test account
+        uses: aws-actions/configure-aws-credentials@v1.6.0
+        with:
+          role-to-assume: arn:aws:iam::717012417639:role/srv_ops
+          aws-region: us-east-1
 
       - name: Access EKS
         run: |
-          curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sigstore" | jq -r '.value' > $AWS_WEB_IDENTITY_TOKEN_FILE
           aws eks update-kubeconfig --name usw2-eks-a
           
       - name: Set up QEMU
