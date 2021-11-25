@@ -22,7 +22,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ github.token }}
 
-      - name: Configure AWS credentials from Test account
+      - name: Login to AWS
         uses: aws-actions/configure-aws-credentials@v1.6.0
         with:
           role-to-assume: arn:aws:iam::717012417639:role/srv_ops
