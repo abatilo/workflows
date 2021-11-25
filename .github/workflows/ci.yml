@@ -11,8 +11,6 @@ jobs:
   deploy:
     name: Build, push, and deploy
     runs-on: ubuntu-latest
-    env:
-      AWS_DEFAULT_REGION: us-west-2
     steps:
       - uses: actions/checkout@v2
       - uses: asdf-vm/actions/install@v1
@@ -23,23 +21,23 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ github.token }}
-          
+
       - name: Configure AWS credentials from Test account
         uses: aws-actions/configure-aws-credentials@v1.6.0
         with:
           role-to-assume: arn:aws:iam::717012417639:role/srv_ops
-          aws-region: us-east-1
+          aws-region: us-west-2
 
       - name: Access EKS
         run: |
           aws eks update-kubeconfig --name usw2-eks-a
-          
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
-        
+
       - name: Create buildx daemon
         uses: docker/setup-buildx-action@v1
-        
+
       - name: Set docker metadata
         id: meta
         uses: docker/metadata-action@v3
