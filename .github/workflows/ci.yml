@@ -6,6 +6,16 @@ on:
         description: "Application / container name"
         required: true
         type: string
+      file:
+        description: "Path to Dockerfile"
+        required: false
+        type: string
+        default: "Dockerfile"
+      context:
+        description: "Path to docker build context"
+        required: false
+        type: string
+        default: "."
 
 jobs:
   deploy:
@@ -55,6 +65,8 @@ jobs:
           cache-from: type=registry,ref=ghcr.io/abatilo/${{ inputs.name }}:buildcache
           cache-to: type=registry,ref=ghcr.io/abatilo/${{ inputs.name }}:buildcache,mode=max
           push: true
+          file: ${{ inputs.file }}
+          context: ${{ inputs.context }}
 
       - name: Deploy
         run: |
