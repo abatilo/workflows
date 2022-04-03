@@ -43,9 +43,6 @@ jobs:
           cluster_name="$(dig +short txt aaronbatilo.dev | jq -r '. | fromjson.cluster_name')"
           aws eks update-kubeconfig --name "${cluster_name}"
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-
       - name: Create buildx daemon
         uses: docker/setup-buildx-action@v1
 
@@ -61,7 +58,7 @@ jobs:
         with:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           cache-from: type=registry,ref=ghcr.io/abatilo/${{ inputs.name }}:buildcache
           cache-to: type=registry,ref=ghcr.io/abatilo/${{ inputs.name }}:buildcache,mode=max
           push: true
