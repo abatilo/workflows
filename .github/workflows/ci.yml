@@ -33,9 +33,9 @@ jobs:
           password: ${{ github.token }}
 
       - name: Login to AWS
-        uses: aws-actions/configure-aws-credentials@v1.6.0
+        uses: aws-actions/configure-aws-credentials@v1.6.1
         with:
-          role-to-assume: arn:aws:iam::717012417639:role/srv_ops
+          role-to-assume: arn:aws:iam::911907402684:role/github
           aws-region: us-west-2
 
       - name: Access EKS
