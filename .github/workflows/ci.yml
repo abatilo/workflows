@@ -6,6 +6,11 @@ on:
         description: "Application / container name"
         required: true
         type: string
+      yaml-path:
+        description: "Path to YAML manifests. Must include trailing slash if set"
+        required: true
+        type: string
+        default: ""
       file:
         description: "Path to Dockerfile"
         required: false
@@ -67,5 +72,5 @@ jobs:
 
       - name: Deploy
         run: |
-          sed -i 's/DOCKER_TAG/${{ steps.meta.outputs.version }}/' ${{ inputs.name }}.yaml
+          sed -i 's/DOCKER_TAG/${{ steps.meta.outputs.version }}/' ${{ inputs.yaml-path }}${{ inputs.name }}.yaml
           kubectl apply -f ${{ inputs.name }}.yaml
