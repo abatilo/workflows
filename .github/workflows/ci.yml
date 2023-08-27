@@ -18,8 +18,8 @@ on:
         default: "."
 
 jobs:
-  deploy:
-    name: Build, push, and deploy
+  push:
+    name: Build and push
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
