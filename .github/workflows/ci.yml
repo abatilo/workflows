@@ -1,4 +1,4 @@
-name: Docker build, push, and deploy
+name: Docker build and push
 on:
   workflow_call:
     inputs:
@@ -6,10 +6,6 @@ on:
         description: "Application / container name"
         required: true
         type: string
-      yaml-path:
-        description: "Path to YAML manifests. Must include trailing slash if set"
-        type: string
-        default: ""
       file:
         description: "Path to Dockerfile"
         required: false
@@ -36,17 +32,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ github.token }}
 
-      - name: Login to AWS
-        uses: aws-actions/configure-aws-credentials@v1.6.1
-        with:
-          role-to-assume: arn:aws:iam::911907402684:role/github
-          aws-region: us-west-2
-
-      - name: Access EKS
-        run: |
-          cluster_name="$(dig +short txt aaronbatilo.dev | jq -r '. | fromjson.cluster_name')"
-          aws eks update-kubeconfig --name "${cluster_name}"
-
       - name: Create buildx daemon
         uses: docker/setup-buildx-action@v1
 
@@ -63,13 +48,8 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64
-          cache-from: type=registry,ref=ghcr.io/abatilo/${{ inputs.name }}:buildcache
-          cache-to: type=registry,ref=ghcr.io/abatilo/${{ inputs.name }}:buildcache,mode=max
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           push: true
           file: ${{ inputs.file }}
           context: ${{ inputs.context }}
-
-      - name: Deploy
-        run: |
-          sed -i 's/DOCKER_TAG/${{ steps.meta.outputs.version }}/' ${{ inputs.yaml-path }}${{ inputs.name }}.yaml
-          kubectl apply -f ${{ inputs.name }}.yaml
